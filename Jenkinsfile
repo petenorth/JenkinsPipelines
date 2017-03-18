@@ -3,5 +3,5 @@ node('fis2') {
   git 'https://github.com/petenorth/camel-cxf-wsdl-first-spring-boot.git'
   stage 'build'
   sh 'ls -l /tmp/.m2/repository'
-  sh 'mvn clean install -settings configuration/settings.xml -X'
+  sh 'mvn clean install -settings configuration/settings.xml'
 }
