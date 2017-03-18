@@ -8,7 +8,7 @@ RUN cd $HOME && git clone https://github.com/petenorth/camel-cxf-wsdl-first-spri
 
 RUN ls ~/.m2
 
-RUN ls -l $HOME/.m2/repository
+RUN ls -l $HOME/.m2
 
 USER 1001
 
