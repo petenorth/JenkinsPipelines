@@ -1,4 +1,4 @@
-node('maven') {
+node('fis2') {
   stage 'clone repo'
   git 'https://github.com/petenorth/camel-cxf-wsdl-first-spring-boot.git'
   stage 'build'
