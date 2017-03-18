@@ -1,6 +1,6 @@
-#JenkinsPipelines
+# JenkinsPipelines
 
-##Introduction
+## Introduction
 
 This project demonstrates how to speed up maven builds when using PipelineStrategy within Openshift.
 
@@ -19,7 +19,7 @@ An alternative approach is to look at what is downloaded during a build? In the 
   
 This is similar to the system repository of the Fuse install or a offline repo. It won't change very frequently and represents 90% of the artifacts downloaded. So based on this lets create a derived docker image based on the maven slave image shipped with the Openshift product and then configure Jenkins to recognize this image.
 
-##Installation/Build
+## Installation/Build
 
 Create a build config to build the derived image
 
