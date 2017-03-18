@@ -1,6 +1,6 @@
 node('maven') {
   stage 'clone repo'
-  git 'https://github.com/petenorth/spring-boot-cxf-jaxrs.git'
+  git 'https://github.com/petenorth/camel-cxf-wsdl-first-spring-boot.git'
   stage 'build'
   sh 'mvn clean install'
 }
