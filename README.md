@@ -6,11 +6,11 @@ This project demonstrates how to speed up maven builds when using PipelineStrate
 
 Openshift will create a Jenkins pod automatically when a build configuration is created which uses the PipelineStrategy.
 
-When the pipeline is started within Openshift Jenkins will read the contents of the Jenkinsfile contained within the build configuration and when it encounters function calls node(...) will try and match the string argument to a pod template configured within the main Jenkins instance. The pod template lists containers and associated docker images that will be used when creating a slave pod which will carry out the tasks listed in the node(...) function body.
+When the pipeline is started within Openshift, Jenkins will read the contents of the Jenkinsfile contained within the build configuration and when it encounters function calls such as `node(...)` it will try and match the string argument to a pod template configured within the main Jenkins instance. The pod template lists containers and associated docker images that will be used when creating a slave pod. The slave pod then carries out the tasks listed in the `node(...)` function body.
 
 Openshift ships with 2 default pod templates, one for nodejs and one for maven. These templates are meant to be general purpose slave images.Focusing on Maven, the general purpose nature means that it has an empty local maven repository cache. So every time a build using the slave is executed it must download everything.
 
-For s2i builds there are features such as incremental builds and/or placing a nexus instance as a pod in Openshift to minimise network traffic etc. . The latter is of some use for Openshift Jenkins slave image builds but it isn't that great. Builds will still take too long.
+For s2i builds there are features such as incremental builds and/or placing a nexus instance as a pod in Openshift to minimise download times. The latter is of some use for Openshift Jenkins slave image builds but it isn't that great. Builds will still take too long.
 
 An alternative approach is to look at what is downloaded during a build? In the case of a FIS 2.0 well structured project it will be
 
@@ -24,14 +24,16 @@ This is similar to the system repository of the Fuse install or a offline repo. 
 Create a build config to build the derived image
 
     oc new-build https://github.com/petenorth/JenkinsPipelines.git --context-dir=fis2-maven
-    
-Once build look at the image stream created and get the registry location something like
+
+The docker file `fis2-maven/Dockerfile` being used here just does a git clone of a FIS 2.0 sample project and goes on to do a maven build. The clone and build are executed as root and so there is some copying of files at the end to the location used as the m2 cache when the image runs as a slave.
+
+Once built look at the image stream created and get the registry location something like
 
     172.30.5.30:5000/sample-project/jenkinspipelines
     
 Go to the Jenkins instance and after logging in as admin click on 'manage jenkins'. Navigate to the kubernetes jenkins plugin section and create a new pod template based on the one called maven. Give a name and label of fis2 and specify the docker image as the registry location previously noted. Make sure the Jenkins Slave root directory is /tmp .
 
-All that remains is to create a build config from the yaml
+All that remains is to create a build config from some yaml, the `buildconfig.yaml` present in this project simply the references the same FIS 2.0 sample project used when creating the docker slave image but could be any FIS 2.0 project using the same versions of the standard maven plugings.
 
     oc create -f buildconfig.yaml
 
