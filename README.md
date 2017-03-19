@@ -25,7 +25,7 @@ Create a build config to build the derived image
 
     oc new-build https://github.com/petenorth/JenkinsPipelines.git --context-dir=fis2-maven
 
-The docker file `fis2-maven/Dockerfile` being used here just does a git clone of a FIS 2.0 sample project and goes on to do a maven build. The clone and build are executed as root and so there is some copying of files at the end to the location used as the m2 cache when the image runs as a slave.
+The docker file `fis2-maven/Dockerfile` being used here just does a git clone of a FIS 2.0 sample project and goes on to do a maven build. The clone and build are executed as root which means that that the maven cache used by the root user must be copied to the location used as the m2 cache when the image runs as a slave.
 
 Once built look at the image stream created and get the registry location something like
 
